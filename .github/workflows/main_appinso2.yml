@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy JAR app to Azure Web App - appINSO2
+name: Build and deploy JAR app to Azure Web App - appISW2E
 
 on:
   push:
@@ -13,7 +13,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read #This is required for actions/checkout
+      contents: read
+
+    env:
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_URL: ${{ secrets.DB_URL }}
 
     steps:
       - uses: actions/checkout@v4
@@ -37,9 +45,17 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
-  
+      id-token: write
+      contents: read
+
+    env:
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_URL: ${{ secrets.DB_URL }}
+
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
@@ -49,15 +65,14 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_7E1958A5118C4C608DA14D52EDE2CF3A }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_8BE98B170510460488BAA3426B04E24C }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_6F823CFC36D645DE94A5037E1316281B }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_0C0A1778529F4AEF82098000FF0569EF }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_A2E4CFC36F2E4AC498D54DAF5FD0A194 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_131F90F9180D4320A1F8C28B7428EB35 }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'appINSO2'
+          app-name: 'appISW2E'
           slot-name: 'Production'
           package: '*.jar'
-          
